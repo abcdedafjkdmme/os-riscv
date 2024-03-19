@@ -15,7 +15,8 @@ GDB = gdb-multiarch
 GDB_FLAGS = -tui -ex 'target remote :1234' -ex 'dir $(SRC_DIR)'
 QEMU = qemu-system-riscv64
 QEMU_MACH = virt
-QEMU_RUN_FLAGS = -machine $(QEMU_MACH) -m 128M -bios none -gdb tcp::1234
+QEMU_RUN_FLAGS = -machine $(QEMU_MACH) -m 128M -bios none
+QEMU_DEBUG_RUN_FLAGS = -machine $(QEMU_MACH) -m 128M -bios none -gdb tcp::1234 -S
 VIRT_DTB_FILE = riscv64-virt.dtb
 VIRT_DTS_FILE = riscv64-virt.dts
 
@@ -31,7 +32,10 @@ ASM_OBJS = src/boot.o
 run: all
 	$(QEMU) -kernel $(OS_IMAGE) $(QEMU_RUN_FLAGS)
 
-debug: run
+debug-run: all 
+	$(QEMU) -kernel $(OS_IMAGE) $(QEMU_DEBUG_RUN_FLAGS)
+
+debug: all
 	$(GDB) $(OS_IMAGE) $(GDB_FLAGS)
 
 all: $(OS_IMAGE)
@@ -39,8 +43,7 @@ all: $(OS_IMAGE)
 clean:
 	rm -rf src/*.o *.dtb *.elf
 
-gen-virt-dtb:
-	$(QEMU) -machine $(QEMU_MACH) -machine dumpdtb=${VIRT_DTB_FILE}
+
 
 $(OS_IMAGE): $(C_OBJS) $(ASM_OBJS)
 	$(LD) $(LD_FLAGS) -T $(LD_SCRIPT) $^ -o $(OS_IMAGE) 
@@ -57,7 +60,10 @@ $(OS_IMAGE): $(C_OBJS) $(ASM_OBJS)
 %.o: %.s
 	$(AS) $(AS_FLAGS) -c $< -o $@
 
-gen-virt-dts: gen-virt-dtb 
+gen-dtb:
+	$(QEMU) -machine $(QEMU_MACH) -machine dumpdtb=$(VIRT_DTB_FILE)
+
+gen-dts: gen-dtb 
 	dtc -I dtb -O dts $(VIRT_DTB_FILE) -o $(VIRT_DTS_FILE)
 
 objdump-os-image: $(OS_IMAGE)
