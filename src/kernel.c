@@ -1,13 +1,16 @@
+#include <stdint.h>
+
+#define SERIAL_BASE_ADDR 0x10000000
+
 void kmain(){
-    int i = 5;
-    int b = 5;
-    int t = fo();
+
+    for(uintptr_t ptr = SERIAL_BASE_ADDR; ptr < 100; ptr++){
+        *(uint32_t*)ptr = 'H';
+    }
+
+    *(uint8_t*)SERIAL_BASE_ADDR = 'H';  
+
     for(;;){
         asm volatile("wfi");
     };
-}
-
-int fo(){
-    int i = 5;
-    return i;
 }

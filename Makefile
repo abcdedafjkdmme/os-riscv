@@ -15,11 +15,11 @@ GDB = gdb-multiarch
 GDB_FLAGS = -tui -ex 'target remote :1234' -ex 'dir $(SRC_DIR)'
 QEMU = qemu-system-riscv64
 QEMU_MACH = virt
-QEMU_RUN_FLAGS = -machine $(QEMU_MACH) -m 128M -bios none -gdb tcp::1234 -S
+QEMU_RUN_FLAGS = -machine $(QEMU_MACH) -m 128M -bios none -gdb tcp::1234
 VIRT_DTB_FILE = riscv64-virt.dtb
 VIRT_DTS_FILE = riscv64-virt.dts
 
-
+HEADERS = 
 C_SRCS = src/kernel.c src/help.c
 C_OBJS = src/kernel.o src/help.o
 
@@ -51,7 +51,7 @@ $(OS_IMAGE): $(C_OBJS) $(ASM_OBJS)
 #kernel.o: src/kernel.c
 #	$(CC) -o kernel.o -c src/kernel.c $(CFLAGS)
 
-%.o: %.c
+%.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 %.o: %.s
