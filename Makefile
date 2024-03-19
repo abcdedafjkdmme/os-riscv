@@ -1,29 +1,55 @@
+OS_IMAGE = kernel.elf
+SRC_DIR = src 
+
+CC = riscv64-unknown-elf-gcc
+CFLAGS = -g -ffreestanding -Wall -Wextra -Wfloat-equal -Wshadow -Wpointer-arith -Wcast-align\
+		 -Wconversion -Wunreachable-code -Wswitch-enum -Wswitch-default -Wcast-qual -Wwrite-strings\
+		 -Wstrict-overflow=5  -nostdlib -nodefaultlibs -nostartfiles
+AS = riscv64-unknown-elf-as 
+AS_FLAGS=
+LD = riscv64-unknown-elf-ld 
+LD_FLAGS = --gc-sections 
+LD_SCRIPT = linker.ld
+OBJDUMP = riscv64-unknown-elf-objdump
+GDB = gdb-multiarch
+GDB_FLAGS = -tui -ex 'target remote :1234' -ex 'dir $(SRC_DIR)'
+QEMU = qemu-system-riscv64
+QEMU_MACH = virt
+QEMU_RUN_FLAGS = -machine $(QEMU_MACH) -m 128M -bios none -gdb tcp::1234 -S
 VIRT_DTB_FILE = riscv64-virt.dtb
 VIRT_DTS_FILE = riscv64-virt.dts
 
+
+C_SRCS = src/kernel.c
+C_OBJS = $(C_SRCS:%.c=%.o)
+
+ASM_SRCS = src/boot.s 
+ASM_OBJS = $(ASM_SRCS:%.c=%.o)
+
 debug: all
-	gdb-multiarch kernel.elf --tui -ex 'target remote :1234'
+	$(GDB) $(OS_IMAGE) $(GDB_FLAGS)
 run: all
-	qemu-system-riscv64 -machine virt -m 128M -bios none -kernel kernel.elf -gdb tcp::1234 -S
+	$(QEMU) -kernel $(OS_IMAGE) $(QEMU_RUN_FLAGS)
 
-all: kernel.elf
+all: $(OS_IMAGE)
 
-gen-virt-dts: gen-virt-dtb 
-	dtc -I dtb -O dts ${VIRT_DTB_FILE} -o ${VIRT_DTS_FILE}
-	rm ${VIRT_DTB_FILE}
+clean:
+	rm -rf *.o *.dtb *.elf
 
 gen-virt-dtb:
-	qemu-system-riscv64 -machine virt -machine dumpdtb=${VIRT_DTB_FILE}
+	$(QEMU) -machine $(QEMU_MACH) -machine dumpdtb=${VIRT_DTB_FILE}
 
-objdump-kernel.elf: kernel.elf
-	riscv64-unknown-elf-objdump -d kernel.elf
+$(OS_IMAGE): boot.o kernel.o 
+	$(LD) -T $(LD_SCRIPT) boot.o kernel.o -o $(OS_IMAGE) $(LD_FLAGS)
 
-kernel.elf: boot.o kernel.o 
-	riscv64-unknown-elf-ld -T linker.ld --gc-sections -nostdlib -nostartfiles -nodefaultlibs boot.o kernel.o -o kernel.elf
+boot.o: src/boot.s 
+	$(AS) -o boot.o -c src/boot.s
 
-boot.o: boot.s 
-	riscv64-unknown-elf-as -o boot.o boot.s
+kernel.o: src/kernel.c
+	$(CC) -o kernel.o -c src/kernel.c $(CFLAGS)
 
-kernel.o: kernel.c
-	riscv64-unknown-elf-gcc -o kernel.o -c kernel.c -g -ffreestanding -Wall -Wextra 
+gen-virt-dts: gen-virt-dtb 
+	dtc -I dtb -O dts $(VIRT_DTB_FILE) -o $(VIRT_DTS_FILE)
 
+objdump-os-image: $(OS_IMAGE)
+	$(OBJDUMP) -d $(OS_IMAGE)
