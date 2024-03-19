@@ -20,33 +20,42 @@ VIRT_DTB_FILE = riscv64-virt.dtb
 VIRT_DTS_FILE = riscv64-virt.dts
 
 
-C_SRCS = src/kernel.c
-C_OBJS = $(C_SRCS:%.c=%.o)
+C_SRCS = src/kernel.c src/help.c
+C_OBJS = src/kernel.o src/help.o
 
 ASM_SRCS = src/boot.s 
-ASM_OBJS = $(ASM_SRCS:%.c=%.o)
+ASM_OBJS = src/boot.o
 
-debug: all
-	$(GDB) $(OS_IMAGE) $(GDB_FLAGS)
+.PHONY: clean all run 
+
 run: all
 	$(QEMU) -kernel $(OS_IMAGE) $(QEMU_RUN_FLAGS)
+
+debug: run
+	$(GDB) $(OS_IMAGE) $(GDB_FLAGS)
 
 all: $(OS_IMAGE)
 
 clean:
-	rm -rf *.o *.dtb *.elf
+	rm -rf src/*.o *.dtb *.elf
 
 gen-virt-dtb:
 	$(QEMU) -machine $(QEMU_MACH) -machine dumpdtb=${VIRT_DTB_FILE}
 
-$(OS_IMAGE): boot.o kernel.o 
-	$(LD) -T $(LD_SCRIPT) boot.o kernel.o -o $(OS_IMAGE) $(LD_FLAGS)
+$(OS_IMAGE): $(C_OBJS) $(ASM_OBJS)
+	$(LD) $(LD_FLAGS) -T $(LD_SCRIPT) $^ -o $(OS_IMAGE) 
 
-boot.o: src/boot.s 
-	$(AS) -o boot.o -c src/boot.s
+#src/boot.o: src/boot.s 
+#	$(AS) -o src/boot.o -c src/boot.s
 
-kernel.o: src/kernel.c
-	$(CC) -o kernel.o -c src/kernel.c $(CFLAGS)
+#kernel.o: src/kernel.c
+#	$(CC) -o kernel.o -c src/kernel.c $(CFLAGS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.s
+	$(AS) $(AS_FLAGS) -c $< -o $@
 
 gen-virt-dts: gen-virt-dtb 
 	dtc -I dtb -O dts $(VIRT_DTB_FILE) -o $(VIRT_DTS_FILE)
