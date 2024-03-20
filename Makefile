@@ -2,13 +2,13 @@ OS_IMAGE = kernel.elf
 SRC_DIR = src 
 
 CC = riscv64-unknown-elf-gcc
-CFLAGS = -g -ffreestanding -Wall -Wextra -Wfloat-equal -Wshadow -Wpointer-arith -Wcast-align\
+CFLAGS = -g -O0 -mcmodel=medany -ffreestanding -Wall -Wextra -Wfloat-equal -Wshadow -Wpointer-arith -Wcast-align\
 		 -Wconversion -Wunreachable-code -Wswitch-enum -Wswitch-default -Wcast-qual -Wwrite-strings\
-		 -Wstrict-overflow=5  -nostdlib -nodefaultlibs -nostartfiles
+		 -Wstrict-overflow=5  -nostdlib -nodefaultlibs -nostartfiles -I./src
 AS = riscv64-unknown-elf-as 
 AS_FLAGS=
 LD = riscv64-unknown-elf-ld 
-LD_FLAGS = --gc-sections 
+LD_FLAGS = --gc-sections -nostdlib
 LD_SCRIPT = linker.ld
 OBJDUMP = riscv64-unknown-elf-objdump
 GDB = gdb-multiarch
@@ -20,12 +20,12 @@ QEMU_DEBUG_RUN_FLAGS = -machine $(QEMU_MACH) -m 128M -bios none -gdb tcp::1234 -
 VIRT_DTB_FILE = riscv64-virt.dtb
 VIRT_DTS_FILE = riscv64-virt.dts
 
-HEADERS = 
-C_SRCS = src/kernel.c src/help.c
-C_OBJS = src/kernel.o src/help.o
+HEADERS = $(wildcard src/*.h src/cstdlib/*.h)
+C_SRCS = $(wildcard src/*.c src/cstdlib/*.c)
+C_OBJS = $(C_SRCS:.c=.o)
 
-ASM_SRCS = src/boot.s 
-ASM_OBJS = src/boot.o
+ASM_SRCS = $(wildcard src/*.s src/cstdlib/*.s)
+ASM_OBJS = $(ASM_SRCS:.s=.o)
 
 .PHONY: clean all run 
 

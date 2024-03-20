@@ -14,8 +14,7 @@ _start:
 
     la a0, interrupt_handler
     csrw mtvec , a0
-
-
+    
     jal zero, kmain
     .cfi_endproc
     .end
