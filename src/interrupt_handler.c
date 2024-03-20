@@ -7,7 +7,7 @@
 #pragma GCC optimize ("align-functions=4")
 __attribute__ ((interrupt ("machine")))
 void interrupt_handler(void){
-    putchar('i');
+    puts("interrupt!!!");
     asm volatile("wfi");
 };
 #pragma GCC pop_options
