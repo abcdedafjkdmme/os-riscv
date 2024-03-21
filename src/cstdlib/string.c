@@ -21,9 +21,12 @@ char* strcpy( char* dest, const char* src ){
     return temp;
 }
 
-int memcmp( const void* lhs, const void* rhs, size_t count ){
-     unsigned char *p = b;
-    unsigned char *q = c;
+int memcmp( const void* lhs, const void* rhs, size_t len ){
+
+    if(lhs == rhs){ return 0;}
+
+    unsigned char *p = lhs;
+    unsigned char *q = rhs;
 
     while (len > 0)
     {
@@ -34,4 +37,14 @@ int memcmp( const void* lhs, const void* rhs, size_t count ){
         q++;
     }
     return 0;
+}
+
+void* memset(void *dest, int val, size_t len) {
+    unsigned char *dst = dest;
+    while (len > 0) {
+        *dst = (unsigned char) val;
+        dst++;
+        len--;
+    }
+    return val;
 }

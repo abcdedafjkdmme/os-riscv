@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 
+#define ustar_file_block_size 512
 #define ustar_filetype_normal '0'
 #define ustar_filetype_hardlink '1'
 #define ustar_filetype_symlink '2' 
@@ -9,15 +10,16 @@
 #define ustar_filetype_dir '5'
 #define ustar_filetype_named_pipe '6' 
 #define ustar_file_checksum_value_as_spaces 32
+#define ustar_file_lookup_max_tries 50
 
-struct ustar_file {
+struct ustar_file_header {
     char name[100]; 
     char mode[8];
     char owner_id[8];
     char group_id[8];
     uint8_t file_size_octal[12];
     uint8_t last_modification_time_octal[12];
-    uint8_t checksum[8];
+    uint8_t checksum_octal[8];
     uint8_t type_flag;
     char linked_filename[100];
     char ustar_indicator[6];
@@ -29,8 +31,8 @@ struct ustar_file {
     char filename_prefix[155];
 }  __attribute__ ((aligned (512)));
 
-typedef struct ustar_file ustar_file_t;
+typedef struct ustar_file_header ustar_file_header_t;
 
-void create_ustar_file_t(ustar_file_t* file);
+void create_ustar_file_t(ustar_file_header_t* file);
 
-void* lookup_ustar_file_data(char* filename);
+void* lookup_ustar_file_data(char* filename, void* archive){
