@@ -15,7 +15,7 @@ static int oct_str_to_int(unsigned char *str, int size)
     return n;
 }
 
-static int uint16_to_oct_char(uint16_t num, char* str, size_t str_size)
+static int uint16_to_oct_str(uint16_t num, char* str, size_t str_size)
 {
     if(str_size < 7){
         return -1;
