@@ -13,10 +13,16 @@ LD_SCRIPT = linker.ld
 OBJDUMP = riscv64-unknown-elf-objdump
 GDB = gdb-multiarch
 GDB_FLAGS = -tui -ex 'target remote :1234' -ex 'dir $(SRC_DIR)'
+
 QEMU = qemu-system-riscv64
 QEMU_MACH = virt
-QEMU_RUN_FLAGS = -machine $(QEMU_MACH) -m 128M -bios none
-QEMU_DEBUG_RUN_FLAGS = -machine $(QEMU_MACH) -m 128M -bios none -gdb tcp::1234 -S
+QEMU_DRIVE_FILE = virt-drive.raw
+QEMU_RUN_FLAGS = -machine $(QEMU_MACH) -m 128M -bios none\
+				 -drive if=none,format=raw,file=$(QEMU_DRIVE_FILE),id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
+
+QEMU_DEBUG_RUN_FLAGS = -gdb tcp::1234 -S -machine $(QEMU_MACH) -m 128M -bios none\
+					   -drive if=none,format=raw,file=hdd.dsk,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0 
+
 VIRT_DTB_FILE = riscv64-virt.dtb
 VIRT_DTS_FILE = riscv64-virt.dts
 

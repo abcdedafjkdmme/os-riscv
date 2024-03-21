@@ -12,11 +12,12 @@ int putchar(char ch){
 }
 
 int puts(const char* str){
-    for(int i = 0; i < strlen(str); i++){
+    for(size_t i = 0; i < strlen(str); i++){
         int res = putchar(str[i]);
         if(res != 0)
         {
             return res;
         }
     }
+    return 0;
 }

@@ -5,7 +5,6 @@
 
 void kmain(){
     puts("hello");
-
     for(;;){
         asm volatile("wfi");
     };
