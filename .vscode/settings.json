@@ -1,6 +1,12 @@
 {
     "files.associations": {
         "stdint.h": "c",
-        "cstdint": "cpp"
+        "cstdint": "cpp",
+        "memory": "c",
+        "cstring": "c",
+        "xstring": "c",
+        "xutility": "c",
+        "stddef.h": "c",
+        "ustar_filesystem.h": "c"
     }
 }
