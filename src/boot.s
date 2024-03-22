@@ -1,3 +1,4 @@
+
 .section .init, "ax"
 .global _start
 _start:
@@ -12,9 +13,10 @@ _start:
 
     csrw mie, 1
 
-    la a0, interrupt_handler
+    la a0, c_intr
     csrw mtvec , a0
     
     jal zero, kmain
     .cfi_endproc
     .end
+

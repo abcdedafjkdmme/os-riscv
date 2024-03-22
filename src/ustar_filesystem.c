@@ -2,8 +2,10 @@
 #include "common.h"
 #include "string.h"
 #include <stddef.h>
+#include <stdarg.h>
+#include <assert.h>
 
-int generate_ustar_file_checksum(ustar_file_header_t *file_header)
+size_t generate_ustar_file_checksum(ustar_file_header_t *file_header)
 {
     /*
     if(file_header == NULL) return -1;
@@ -17,9 +19,10 @@ int generate_ustar_file_checksum(ustar_file_header_t *file_header)
     return checksum;
     */
     
-   
+    assert(file_header != NULL);
+
     const uint8_t *header = (const uint8_t *) file_header;
-    unsigned int chksum;
+    size_t chksum;
     size_t i;
 
     chksum = 0;
@@ -37,14 +40,11 @@ int generate_ustar_file_checksum(ustar_file_header_t *file_header)
 
 int is_block_valid_ustar_file_header(ustar_file_header_t *file_header)
 {
-    if (file_header == NULL)
-        return -1;
+    assert(file_header != NULL);
 
-    int file_header_checksum_val =  oct_str_to_int(file_header->checksum_octal, sizeof file_header->checksum_octal);
+    size_t file_header_checksum_val =  oct_str_to_int(file_header->checksum_octal, sizeof file_header->checksum_octal);
 
-    puts(file_header->checksum_octal);
-
-    int correct_checksum = generate_ustar_file_checksum(file_header);
+    size_t correct_checksum = generate_ustar_file_checksum(file_header);
 
     int does_file_header_have_correct_ustar_indicator = memcmp(file_header->ustar_indicator, "ustar", sizeof file_header->ustar_indicator);
     int does_file_header_have_correct_ustar_version = memcmp(file_header->ustar_version, "00", sizeof file_header->ustar_version);
@@ -58,29 +58,23 @@ int is_block_valid_ustar_file_header(ustar_file_header_t *file_header)
     return 0;
 }
 
-int ustar_file_header_create(ustar_file_header_t *file_header)
+void ustar_file_header_create(ustar_file_header_t *file_header)
 {
-    if (file_header == NULL)
-        return -1;
+    assert(file_header != NULL);
 
     memcpy(file_header->ustar_indicator, "ustar", 6);
     memcpy(file_header->ustar_version, "00", 2);
 
-    int checksum = generate_ustar_file_checksum(file_header);
+    uint16_t checksum = (uint16_t)generate_ustar_file_checksum(file_header);
 
-    if (checksum < 0)
-        return -1;
-
-    int res = uint16_to_oct_str(checksum, file_header->checksum_octal, sizeof file_header->checksum_octal);
-    return res;
+    uint16_to_oct_str(checksum, file_header->checksum_octal, sizeof file_header->checksum_octal);
+ 
 }
 
-void *ustar_file_header_lookup(char *filename, void *archive)
+void *ustar_file_header_lookup(const char *filename, void *archive)
 {
-    if (filename == NULL)
-        return NULL;
-    if (archive == NULL)
-        return NULL;
+    assert(filename != NULL);
+    assert(archive != NULL);
 
     for (size_t i = 0; i < ustar_file_lookup_max_tries; i++)
     {
@@ -91,4 +85,8 @@ void *ustar_file_header_lookup(char *filename, void *archive)
         }
     }
     return NULL;
+}
+
+int ustar_file_open(const char* path, int flags, ...){
+    
 }

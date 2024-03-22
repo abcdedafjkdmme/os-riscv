@@ -1,42 +1,37 @@
 #include "string.h"
 #include "stdio.h"
 #include <stdint.h>
+#include <assert.h>
 
 size_t strlen( const char* str ){
+    assert(str != NULL);
+
     const char *s;
     for (s = str; *s; ++s);
-    return (s - str);
+
+    assert(s >= str);
+
+    return (size_t)(s - str);
 }
 
 char* strcpy( char* dest, const char* src ){
-    if(dest == NULL){
-        puts(" strcpy dest is null !!");
-        return NULL;
-    }
-    if(src == NULL){
-        puts(" strcpy src is null !!");
-        return NULL;
-    }
+    assert(dest != NULL);
+    assert(src != NULL);
+
     char *temp = dest;
-    while(*dest++ = *src++); // or while((*strDest++=*strSrc++) != '\0');
+    while((*dest++ = *src++) != '\0'); // or while((*strDest++=*strSrc++) != '\0');
     return temp;
 }
 
 int memcmp( const void* lhs, const void* rhs, size_t len ){
 
-    if(lhs == NULL){
-        puts(" memcmp lhs is null");
-        return -1;
-    }
-    if(rhs == NULL){
-        puts(" memcmp rhs is null");
-        return -1;
-    }
+    assert(lhs != NULL);
+    assert(rhs != NULL);
 
     if(lhs == rhs){ return 0;}
 
-    unsigned char *p = lhs;
-    unsigned char *q = rhs;
+    const unsigned char *p = lhs;
+    const unsigned char *q = rhs;
 
     while (len > 0)
     {
@@ -51,10 +46,7 @@ int memcmp( const void* lhs, const void* rhs, size_t len ){
 
 //TODO: probaly wrong ret value prev was val
 void* memset(void *dest, int val, size_t len) {
-     if(dest == NULL){
-        puts(" memset dest is null !!");
-        return NULL;
-    }
+    assert(dest != NULL);
     
     unsigned char *dst = dest;
     while (len > 0) {
@@ -66,20 +58,14 @@ void* memset(void *dest, int val, size_t len) {
 }
 
 void* memcpy(void* dest, const void* src, size_t len){
-     if(dest == NULL){
-        puts(" memcpy dest is null !!");
-        return NULL;
-    }
-    if(src == NULL){
-        puts(" memcpy src is null !!");
-        return NULL;
-    }
+    assert(dest != NULL);
+    assert(src != NULL);
 
     uint8_t *pdest = (uint8_t*) dest;
     uint8_t *psrc = (uint8_t*) src;
 
-    int loops = (len / sizeof(uint32_t));
-    for(int index = 0; index < loops; ++index)
+    size_t loops = (len / sizeof(uint32_t));
+    for(size_t index = 0; index < loops; ++index)
     {
         *((uint32_t*)pdest) = *((uint32_t*)psrc);
         pdest += sizeof(uint32_t);
@@ -87,10 +73,11 @@ void* memcpy(void* dest, const void* src, size_t len){
     }
 
     loops = (len % sizeof(uint32_t));
-    for (int index = 0; index < loops; ++index)
+    for (size_t index = 0; index < loops; ++index)
     {
         *pdest = *psrc;
         ++pdest;
         ++psrc;
     }
+    return dest;
 }

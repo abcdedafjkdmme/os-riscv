@@ -15,4 +15,6 @@ void assert_failed(char *file, int line, char* expr){
     puts("Assertion '");
     puts(expr);
     puts("' failed. ");
+
+    asm volatile("ebreak");
 }

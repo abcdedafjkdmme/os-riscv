@@ -33,6 +33,7 @@ struct ustar_file_header {
 
 typedef struct ustar_file_header ustar_file_header_t;
 
-void* ustar_file_header_lookup(char* filename, void* archive);
-int ustar_file_header_create(ustar_file_header_t* file_header);
+void* ustar_file_header_lookup(const char* filename, void* archive);
+void ustar_file_header_create(ustar_file_header_t* file_header);
+int ustar_file_open(const char* path, int flags, ...);
 
