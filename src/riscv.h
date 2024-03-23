@@ -115,8 +115,8 @@ static inline reg_t r_mepc()
 
 
 #define MCAUSE_INTERRUPT_MASK (1 << 63)
-#define MCAUSE_INTERRUPT 1
-#define MCAUSE_TRAP 0
+#define MCAUSE_INTERRUPT 0
+#define MCAUSE_EXCEPTION 1
 
 #define MCAUSE_EC_MASK 0b111111111 //excecption code mask
 /*m -> machine

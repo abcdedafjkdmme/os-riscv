@@ -1,6 +1,6 @@
-.global interrupt_handler_asm
+.global interrupt_and_exception_handler_asm
 .align 4
-interrupt_handler_asm:
+interrupt_and_exception_handler_asm:
 # make room to save registers.
         addi sp, sp, -256
 
@@ -38,7 +38,7 @@ interrupt_handler_asm:
         sd t6, 240(sp)
 
         # call the C trap handler in trap.c
-        call interrupt_handler
+        call interrupt_and_exception_handler
 
         # restore registers.
         ld ra, 0(sp)
