@@ -7,6 +7,9 @@
         "xstring": "c",
         "xutility": "c",
         "stddef.h": "c",
-        "ustar_filesystem.h": "c"
+        "ustar_filesystem.h": "c",
+        "riscv.h": "c",
+        "common.h": "c",
+        "stdio.h": "c"
     }
 }

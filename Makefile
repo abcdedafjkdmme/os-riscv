@@ -6,7 +6,7 @@ CFLAGS = -g -O0 -mcmodel=medany -ffreestanding -Wall -Wextra -Wfloat-equal -Wsha
 		 -Wconversion -Wunreachable-code -Wswitch-enum -Wswitch-default -Wcast-qual -Wwrite-strings\
 		 -Wstrict-overflow=5  -nostdlib -nodefaultlibs -nostartfiles -I./src -I./src/cstdlib
 AS = riscv64-unknown-elf-as 
-AS_FLAGS=
+AS_FLAGS= -g
 LD = riscv64-unknown-elf-ld 
 LD_FLAGS = --gc-sections -nostdlib
 LD_SCRIPT = linker.ld

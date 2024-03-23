@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdarg.h>
 #include <assert.h>
+#include <stdbool.h>
 
 size_t generate_ustar_file_checksum(ustar_file_header_t *file_header)
 {
@@ -79,7 +80,7 @@ void *ustar_file_header_lookup(const char *filename, void *archive)
     for (size_t i = 0; i < ustar_file_lookup_max_tries; i++)
     {
         ustar_file_header_t *file_header = &((ustar_file_header_t *)archive)[i];
-        if (is_block_valid_ustar_file_header(file_header))
+        if (is_block_valid_ustar_file_header(file_header) && (memcmp(file_header->name, filename, sizeof filename)==0))
         {
             return file_header;
         }
@@ -87,6 +88,3 @@ void *ustar_file_header_lookup(const char *filename, void *archive)
     return NULL;
 }
 
-int ustar_file_open(const char* path, int flags, ...){
-    
-}

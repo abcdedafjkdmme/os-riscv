@@ -10,12 +10,6 @@ _start:
     .option pop
     la sp, __stack_top
     add s0, sp, zero
-
-    csrw mie, 1
-
-    la a0, c_intr
-    csrw mtvec , a0
-    
     jal zero, kmain
     .cfi_endproc
     .end

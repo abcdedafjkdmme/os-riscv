@@ -1,7 +1,7 @@
 #include "stdio.h"
 #include "common.h"
 
-void assert_failed(char *file, int line, char* expr){
+void assert_failed(const char *file, int line, const char* expr){
     puts(" ");
     puts(file);
     

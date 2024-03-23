@@ -7,6 +7,7 @@
  * Released under GPLv3.
  */
 char* itoa(int value, char* result, int base) {
+    assert(result != NULL);
     // check that the base if valid
     if (base < 2 || base > 36) { *result = '\0'; return result; }
 
@@ -34,8 +35,7 @@ char* itoa(int value, char* result, int base) {
 
 int oct_str_to_int(const unsigned char *str, int size)
 {
-    if (str == NULL)
-        return -1;
+    assert(str != NULL);
 
     int n = 0;
     const unsigned char *c = str;
@@ -51,6 +51,7 @@ int oct_str_to_int(const unsigned char *str, int size)
 void uint16_to_oct_str(uint16_t num, char *str, size_t size)
 {
 
+    assert(str != NULL);
     assert(size > 7);
 
     int index = 0;
