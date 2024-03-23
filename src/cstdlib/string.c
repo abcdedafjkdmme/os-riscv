@@ -81,3 +81,23 @@ void* memcpy(void* dest, const void* src, size_t len){
     }
     return dest;
 }
+
+int strncmp(const char* lhs, const char* rhs, size_t len){
+    assert(lhs != NULL);
+    assert(rhs != NULL);
+    
+    while ( len && *lhs && ( *lhs == *rhs ) )
+    {
+        ++lhs;
+        ++rhs;
+        --len;
+    }
+    if ( len == 0 )
+    {
+        return 0;
+    }
+    else
+    {
+        return ( *(unsigned char *)lhs - *(unsigned char *)rhs );
+    }
+}

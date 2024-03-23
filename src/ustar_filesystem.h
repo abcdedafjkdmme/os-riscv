@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <stddef.h>
 
 #define ustar_file_block_size 512
 #define ustar_filetype_normal '0'
@@ -28,12 +29,12 @@ struct ustar_file_header {
     char owner_group_name[32];
     char device_major_num[8];
     char device_minor_num[8];
-    char filename_prefix[155];
+    char name_prefix[155];
 }  __attribute__ ((aligned (512)));
 
 typedef struct ustar_file_header ustar_file_header_t;
 typedef int ustar_file_mode_t;
 
-void* ustar_file_header_lookup(const char* filename, void* archive);
-void ustar_file_header_create(ustar_file_header_t* file_header);
+void* ustar_file_header_lookup(const char* filename,size_t filename_len, const char* filename_prefix, const char* filename_prefix_len, void* archive, size_t archive_len);
+void ustar_file_header_init(ustar_file_header_t* file_header);
 

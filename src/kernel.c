@@ -9,36 +9,34 @@
 #include <assert.h>
 #include "riscv.h"
 
-//static uint8_t test_filesystem_block[512 * 10];
+static ustar_file_header_t test_ustar_archive[10];
+
+void init_test_ustar_archive(){
+    for(int i = 0; i < ARRAY_SIZE(test_ustar_archive); i++){
+        ustar_file_header_init(&test_ustar_archive[i]);
+    }
+}
 
 void kmain()
 {
 
     interrupt_init();
-    puts("hello");
+    init_test_ustar_archive();
 
-    char mtvec_mode[10];
-    itoa(r_mtvec() & MTVEC_MODE_MASK, mtvec_mode, 10);
-    puts(mtvec_mode);
+    puts("hello");
 
     asm volatile("ecall");
 
-   //ustar_file_header_t *file_header = (ustar_file_header_t *)test_filesystem_block;
+    ustar_file_header_t *file_header = (ustar_file_header_t *)test_ustar_archive;
 
-   // strcpy(file_header->name, "my_file");
-    //ustar_file_header_create(file_header);
-   // void *res = ustar_file_header_lookup("my_file", test_filesystem_block);
+    strcpy(file_header->name, "my_filet");
+    ustar_file_header_init(file_header);
+    void *res = ustar_file_header_lookup("my_file", ARRAY_SIZE("my_file"), "", ARRAY_SIZE(""), &test_ustar_archive, ARRAY_SIZE(test_ustar_archive));
+    assert(res != NULL);
 
-   // if (res == NULL)
-  //  {
-  //      puts(" cant find file");
-  //  }
-   // else
-  //  {
-  //      puts(" found file");
-  //  }
+    puts(" after ecall");
 
-  puts("after intr");
+    syscon_poweroff();
 
     asm volatile("wfi");
 }

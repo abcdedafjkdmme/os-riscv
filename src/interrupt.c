@@ -19,7 +19,7 @@ void exception_handler(void)
 void machine_timer_interrupt_handler(void){
   //to periodically trigger interrupt
   *((uint64_t*)CLINT_MTIME) = 0;
-
+  puts("timer");
 }
 
 void interrupt_handler(void)
