@@ -10,6 +10,7 @@
         "ustar_filesystem.h": "c",
         "riscv.h": "c",
         "common.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "timer.h": "c"
     }
 }

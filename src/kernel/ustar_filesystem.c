@@ -69,7 +69,7 @@ void ustar_file_header_init(ustar_file_header_t *file_header)
     uint16_to_oct_str(checksum, file_header->checksum_octal, sizeof file_header->checksum_octal);
 }
 
-void *ustar_file_header_lookup(const char *filename, size_t filename_len, const char *filename_prefix, const char *filename_prefix_len, void *archive, size_t archive_len)
+void *ustar_file_header_lookup(const char *filename, size_t filename_len, const char *filename_prefix, size_t filename_prefix_len, void *archive, size_t archive_len)
 {
     assert(filename != NULL);
     assert(archive != NULL);

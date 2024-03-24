@@ -114,7 +114,9 @@ static inline reg_t r_mepc()
 }
 
 
-#define MCAUSE_INTERRUPT_MASK (1 << 63)
+#define MCAUSE_INTERRUPT_MASK (1UL << 31)
+
+//both are 0 from what it seems
 #define MCAUSE_INTERRUPT 0
 #define MCAUSE_EXCEPTION 1
 

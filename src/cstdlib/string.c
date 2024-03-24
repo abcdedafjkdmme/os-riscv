@@ -62,12 +62,12 @@ void* memcpy(void* dest, const void* src, size_t len){
     assert(src != NULL);
 
     uint8_t *pdest = (uint8_t*) dest;
-    uint8_t *psrc = (uint8_t*) src;
+    const uint8_t *psrc = (const uint8_t*) src;
 
     size_t loops = (len / sizeof(uint32_t));
     for(size_t index = 0; index < loops; ++index)
     {
-        *((uint32_t*)pdest) = *((uint32_t*)psrc);
+        *((uint32_t*)pdest) = *((const uint32_t*)psrc);
         pdest += sizeof(uint32_t);
         psrc += sizeof(uint32_t);
     }
@@ -85,7 +85,7 @@ void* memcpy(void* dest, const void* src, size_t len){
 int strncmp(const char* lhs, const char* rhs, size_t len){
     assert(lhs != NULL);
     assert(rhs != NULL);
-    
+
     while ( len && *lhs && ( *lhs == *rhs ) )
     {
         ++lhs;
@@ -98,6 +98,6 @@ int strncmp(const char* lhs, const char* rhs, size_t len){
     }
     else
     {
-        return ( *(unsigned char *)lhs - *(unsigned char *)rhs );
+        return ( *(const unsigned char *)lhs - *(const unsigned char *)rhs );
     }
 }

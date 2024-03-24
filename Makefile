@@ -26,11 +26,11 @@ QEMU_DEBUG_RUN_FLAGS = -gdb tcp::1234 -S -machine $(QEMU_MACH) -m 128M -bios non
 VIRT_DTB_FILE = riscv64-virt.dtb
 VIRT_DTS_FILE = riscv64-virt.dts
 
-HEADERS = $(wildcard src/*.h src/cstdlib/*.h)
-C_SRCS = $(wildcard src/*.c src/cstdlib/*.c)
+HEADERS = $(wildcard src/kernel/*.h src/cstdlib/*.h)
+C_SRCS = $(wildcard src/kernel/*.c src/cstdlib/*.c)
 C_OBJS = $(C_SRCS:.c=.o)
 
-ASM_SRCS = $(wildcard src/*.s src/cstdlib/*.s)
+ASM_SRCS = $(wildcard src/kernel/*.s src/cstdlib/*.s)
 ASM_OBJS = $(ASM_SRCS:.s=.o)
 
 .PHONY: clean all run 
@@ -47,7 +47,7 @@ debug: all
 all: $(OS_IMAGE) $(QEMU_DRIVE_FILE)
 
 clean:
-	rm -rf src/*.o *.dtb *.elf
+	rm -rf $(C_OBJS) $(ASM_OBJS)
 
 
 

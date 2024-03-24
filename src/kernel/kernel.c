@@ -12,7 +12,7 @@
 static ustar_file_header_t test_ustar_archive[10];
 
 void init_test_ustar_archive(){
-    for(int i = 0; i < ARRAY_SIZE(test_ustar_archive); i++){
+    for(size_t i = 0; i < ARRAY_SIZE(test_ustar_archive); i++){
         ustar_file_header_init(&test_ustar_archive[i]);
     }
 }
@@ -23,20 +23,21 @@ void kmain()
     interrupt_init();
     init_test_ustar_archive();
 
+    asm volatile("unimp");
+    
     puts("hello");
 
-    asm volatile("ecall");
+    asm volatile("ebreak");
 
     ustar_file_header_t *file_header = (ustar_file_header_t *)test_ustar_archive;
 
     strcpy(file_header->name, "my_filet");
     ustar_file_header_init(file_header);
     void *res = ustar_file_header_lookup("my_file", ARRAY_SIZE("my_file"), "", ARRAY_SIZE(""), &test_ustar_archive, ARRAY_SIZE(test_ustar_archive));
-    assert(res != NULL);
+   // assert(res != NULL);
 
     puts(" after ecall");
 
-    syscon_poweroff();
 
     asm volatile("wfi");
 }

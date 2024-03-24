@@ -35,6 +35,6 @@ struct ustar_file_header {
 typedef struct ustar_file_header ustar_file_header_t;
 typedef int ustar_file_mode_t;
 
-void* ustar_file_header_lookup(const char* filename,size_t filename_len, const char* filename_prefix, const char* filename_prefix_len, void* archive, size_t archive_len);
+void* ustar_file_header_lookup(const char* filename,size_t filename_len, const char* filename_prefix, size_t filename_prefix_len, void* archive, size_t archive_len);
 void ustar_file_header_init(ustar_file_header_t* file_header);
 
