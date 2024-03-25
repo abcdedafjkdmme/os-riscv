@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#define reg_t uint32_t // RISCV32: register is 32bits
-//#define reg_t uint64_t // RISCV64: register is 64bits
+//#define reg_t uint32_t // RISCV32: register is 32bits
+#define reg_t uint64_t // RISCV64: register is 64bits
 
 // Saved registers for kernel context switches.
 struct context {

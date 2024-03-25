@@ -16,6 +16,6 @@ void assert_failed(const char *file, int line, const char* expr){
     puts(expr);
     puts("' failed. ");
 
-    asm volatile(" ebreak ");
+   // asm volatile(" ebreak ");
 
 }

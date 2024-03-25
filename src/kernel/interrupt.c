@@ -47,32 +47,33 @@ void interrupt_handler(void)
 void interrupt_and_exception_handler(void)
 {
   int is_mcause_interrupt_or_trap = r_mcause() & MCAUSE_INTERRUPT_MASK;
-   if (is_mcause_interrupt_or_trap == MCAUSE_EXCEPTION)
-   {
-      exception_handler();
-  }
+  // if (is_mcause_interrupt_or_trap == MCAUSE_EXCEPTION)
+  //  {
+  //     exception_handler();
+  // }
   if(is_mcause_interrupt_or_trap == MCAUSE_INTERRUPT)
   {
     interrupt_handler();
   }
-  //advance mepc to next instr
+  //advance mepc to next instrmak
   w_mepc(r_mepc() + 4);
 }
 
 void interrupt_init()
 {
   // each CPU has a separate source of timer interrupts.
-  int id = r_mhartid();
+  reg_t id = r_mhartid();
 
   // ask the CLINT for a timer interrupt.
-  *(reg_t *)CLINT_MTIMECMP(id) = *(reg_t *)CLINT_MTIME + timer_interval;
+  //*(reg_t *)CLINT_MTIMECMP(id) = *(reg_t *)CLINT_MTIME + timer_interval;
 
+  reg_t interrupt_vector_addr = (reg_t)&interrupt_and_exception_handler_asm;
   // set the machine-mode trap handler.
-  w_mtvec((reg_t)interrupt_and_exception_handler_asm);
+  w_mtvec(interrupt_vector_addr);
 
   // enable machine-mode interrupts.
-  w_mstatus( MSTATUS_MIE);
+ // w_mstatus( MSTATUS_MIE);
 
   // enable machine-mode timer interrupts.
-  w_mie(MIE_MSIE | MIE_MTIE);
+  //w_mie(MIE_MSIE | MIE_MTIE);
 }

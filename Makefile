@@ -13,14 +13,14 @@ LD_FLAGS =  --gc-sections -nostdlib
 LD_SCRIPT = linker.ld
 OBJDUMP = riscv64-unknown-elf-objdump
 GDB = gdb-multiarch
-GDB_FLAGS = -tui -ex 'target remote :1234' -ex 'dir $(SRC_DIR)'
+GDB_FLAGS = --tui -ex 'target remote :1234' -ex 'dir src/kernel' -ex 'dir src/cstdlib'
 
 QEMU = qemu-system-riscv64
 QEMU_MACH = sifive_u
 QEMU_DRIVE_FILE = virt-drive.raw
 QEMU_RUN_FLAGS = -machine $(QEMU_MACH) -m 128M -bios none\
 				 
-QEMU_DEBUG_RUN_FLAGS = -gdb tcp::1234 -S -machine $(QEMU_MACH) -m 128M -bios none\
+QEMU_DEBUG_RUN_FLAGS = -gdb tcp::1234 -S $(QEMU_RUN_FLAGS)
 				
 
 VIRT_DTB_FILE = riscv64-virt.dtb

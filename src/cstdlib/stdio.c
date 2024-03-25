@@ -21,5 +21,10 @@ int puts(const char* str){
 }
 
 int getchar(){
-    return uart_get_byte();
+    char ret = 0;
+    int is_uart_fifo_empty = uart_get_byte(&ret);
+    while(is_uart_fifo_empty){
+        is_uart_fifo_empty = uart_get_byte(&ret);
+    }
+    return ret;
 }

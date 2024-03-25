@@ -21,10 +21,12 @@
 #define UART_TXDATA_FIFO_FULL_MASK (1 << 31)
 #define UART_RXDATA_FIFO_EMPTY_MASK (1 << 31)
 
-#define UART_TXCTRL_TXEN_MASK (1 << 0)
+#define UART_TXCTRL_TXEN_MASK 0x1
 #define UART_TXCTRL_NSTOP_MASK (1 << 1)
-#define UART_RXCTRL_RXEN_MASK (1 << 0)
+#define UART_RXCTRL_RXEN_MASK 0x1
 
-void uart_init();
+#define UART_RX_EMPTY_VALUE 2147483648
+
+void uart_init(int in_freq, int baud_rate);
 void uart_put_byte(uint8_t data);
-uint8_t uart_get_byte();
+int uart_get_byte(uint8_t* res);
