@@ -47,10 +47,10 @@ void interrupt_handler(void)
 void interrupt_and_exception_handler(void)
 {
   int is_mcause_interrupt_or_trap = r_mcause() & MCAUSE_INTERRUPT_MASK;
-  // if (is_mcause_interrupt_or_trap == MCAUSE_EXCEPTION)
-  // {
-  //    exception_handler();
-  // }
+   if (is_mcause_interrupt_or_trap == MCAUSE_EXCEPTION)
+   {
+      exception_handler();
+  }
   if(is_mcause_interrupt_or_trap == MCAUSE_INTERRUPT)
   {
     interrupt_handler();
@@ -68,7 +68,7 @@ void interrupt_init()
   *(reg_t *)CLINT_MTIMECMP(id) = *(reg_t *)CLINT_MTIME + timer_interval;
 
   // set the machine-mode trap handler.
-  w_mtvec(&interrupt_and_exception_handler_asm);
+  w_mtvec((reg_t)interrupt_and_exception_handler_asm);
 
   // enable machine-mode interrupts.
   w_mstatus( MSTATUS_MIE);
