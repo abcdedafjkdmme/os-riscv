@@ -1,14 +1,11 @@
-#include "serial.h"
+#include "uart.h"
 #include "stdio.h"
 #include <string.h>
 
 
 int putchar(char ch){
-    int res = serial_put_byte((uint8_t)ch);
-    if(res != 0){
-        return res;
-    }
-    return 0;
+     uart_put_byte((uint8_t)ch);
+     return 0;
 }
 
 int puts(const char* str){
@@ -20,4 +17,8 @@ int puts(const char* str){
         }
     }
     return 0;
+}
+
+int getchar(){
+    return uart_get_byte();
 }

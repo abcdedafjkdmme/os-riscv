@@ -10,6 +10,6 @@ void mti_handler()
 
 void sti_handler(){
   // to periodically trigger interrupt
-  //*((reg_t *)CLINT_MTIME) = 0;
+  *((reg_t *)CLINT_MTIME) = 0;
   puts(" supervisor timer ");
 }

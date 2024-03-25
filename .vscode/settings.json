@@ -11,6 +11,7 @@
         "riscv.h": "c",
         "common.h": "c",
         "stdio.h": "c",
-        "timer.h": "c"
+        "timer.h": "c",
+        "syscon.h": "c"
     }
 }

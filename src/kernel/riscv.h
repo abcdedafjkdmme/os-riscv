@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-//#define reg_t uint32_t // RISCV32: register is 32bits
-#define reg_t uint64_t // RISCV64: register is 64bits
+#define reg_t uint32_t // RISCV32: register is 32bits
+//#define reg_t uint64_t // RISCV64: register is 64bits
 
 // Saved registers for kernel context switches.
 struct context {
@@ -118,7 +118,7 @@ static inline reg_t r_mepc()
 
 //both are 0 from what it seems
 #define MCAUSE_INTERRUPT 0
-#define MCAUSE_EXCEPTION 1
+#define MCAUSE_EXCEPTION 0
 
 #define MCAUSE_EC_MASK 0b111111111 //excecption code mask
 /*m -> machine

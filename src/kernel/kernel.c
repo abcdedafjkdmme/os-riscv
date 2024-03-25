@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "serial.h"
+#include "uart.h"
 #include <stdio.h>
 #include "syscon.h"
 #include "ustar_filesystem.h"
@@ -20,23 +20,28 @@ void init_test_ustar_archive(){
 void kmain()
 {
 
+    uart_init();
     interrupt_init();
     init_test_ustar_archive();
-
-    asm volatile("unimp");
     
     puts("hello");
 
-    asm volatile("ebreak");
+  //  asm volatile("ebreak");
 
     ustar_file_header_t *file_header = (ustar_file_header_t *)test_ustar_archive;
 
     strcpy(file_header->name, "my_filet");
     ustar_file_header_init(file_header);
     void *res = ustar_file_header_lookup("my_file", ARRAY_SIZE("my_file"), "", ARRAY_SIZE(""), &test_ustar_archive, ARRAY_SIZE(test_ustar_archive));
-   // assert(res != NULL);
+    assert(res == NULL);
 
-    puts(" after ecall");
+    void *res_2 = ustar_file_header_lookup("my_filet", ARRAY_SIZE("my_filet"), "", ARRAY_SIZE(""), &test_ustar_archive, ARRAY_SIZE(test_ustar_archive));
+    assert(res_2 != NULL);
+
+    for(;;){
+         putchar(getchar());
+     }
+
 
 
     asm volatile("wfi");

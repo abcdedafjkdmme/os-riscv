@@ -47,10 +47,10 @@ void interrupt_handler(void)
 void interrupt_and_exception_handler(void)
 {
   int is_mcause_interrupt_or_trap = r_mcause() & MCAUSE_INTERRUPT_MASK;
-  if (is_mcause_interrupt_or_trap == MCAUSE_EXCEPTION)
-  {
-     exception_handler();
-  }
+  // if (is_mcause_interrupt_or_trap == MCAUSE_EXCEPTION)
+  // {
+  //    exception_handler();
+  // }
   if(is_mcause_interrupt_or_trap == MCAUSE_INTERRUPT)
   {
     interrupt_handler();
@@ -74,5 +74,5 @@ void interrupt_init()
   w_mstatus( MSTATUS_MIE);
 
   // enable machine-mode timer interrupts.
-  w_mie(MIE_MSIE);
+  w_mie(MIE_MSIE | MIE_MTIE);
 }

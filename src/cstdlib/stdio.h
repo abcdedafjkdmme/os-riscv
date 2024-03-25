@@ -3,3 +3,4 @@
 
 int putchar(char ch);
 int puts(const char* str);
+int getchar();
